@@ -8,12 +8,17 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "min_unit.h"
 #include "core.h"
 
 int tests_run = 0;
 int tests_failed = 0;
+
+int hijack_stdio(char * file);
+void reset_hijack_stdio(int fd);
+int file_length(FILE * fp);
 
 static char * test_letter_grade() {
     mu_assert("100 should give letter grade 'A'", calculate_grade(100) == 'A');
@@ -60,11 +65,131 @@ static char * test_factorial() {
     return 0;
 }
 
+static char * test_diamond_5() {
+    char * output = "output.txt";
+
+    int stdout_fd = hijack_stdio(output);
+
+    print_diamond(5);
+
+    reset_hijack_stdio(stdout_fd);
+
+    FILE * fp = fopen(output, "r");
+
+    mu_assert("print_diamond(5) should print out 40 characters", file_length(fp) == 40);
+
+    char printed[40 + 1];
+
+    fread(printed, sizeof(char), 40, fp);
+
+    fclose(fp);
+
+    // Mark the end of a string
+    printed[40] = '\0';
+
+    printf("%s\n", printed);
+
+    mu_assert(
+            "print_diamond(5) printed out the incorrect text",
+            strcmp(printed, "*\n**\n***\n****\n*****\n*****\n****\n***\n**\n*\n") == 0
+            );
+
+    return 0;
+}
+
+static char * test_diamond_1() {
+    char * output = "output.txt";
+
+    int stdout_fd = hijack_stdio(output);
+
+    print_diamond(1);
+
+    reset_hijack_stdio(stdout_fd);
+
+    FILE * fp = fopen(output, "r");
+
+    mu_assert("print_diamond(1) should print out 4 characters", file_length(fp) == 4);
+
+    char printed[4 + 1];
+
+    fread(printed, sizeof(char), 4, fp);
+
+    fclose(fp);
+
+    // Mark the end of a string
+    printed[4] = '\0';
+
+    printf("%s\n", printed);
+
+    mu_assert(
+            "print_diamond(1) printed out the incorrect text",
+            strcmp(printed, "*\n*\n") == 0
+            );
+
+    return 0;
+}
+
+static char * test_diamond_10() {
+    char * output = "output.txt";
+
+    int stdout_fd = hijack_stdio(output);
+
+    print_diamond(10);
+
+    reset_hijack_stdio(stdout_fd);
+
+    FILE * fp = fopen(output, "r");
+
+    mu_assert("print_diamond(10) should print out 130 characters", file_length(fp) == 130);
+
+    char printed[130 + 1];
+
+    fread(printed, sizeof(char), 130, fp);
+
+    fclose(fp);
+
+    // Mark the end of a string
+    printed[130] = '\0';
+
+    printf("%s\n", printed);
+
+    mu_assert(
+            "print_diamond(10) printed out the incorrect text",
+            strcmp(printed, "*\n**\n***\n****\n*****\n******\n*******\n********\n*********\n**********\n**********\n*********\n********\n*******\n******\n*****\n****\n***\n**\n*\n") == 0
+            );
+
+    return 0;
+}
+
 static char * all_tests() {
     mu_run_test(test_letter_grade);
     mu_run_test(test_department_name);
     mu_run_test(test_factorial);
+    mu_run_test(test_diamond_1);
+    mu_run_test(test_diamond_5);
+    mu_run_test(test_diamond_10);
     return 0;
+}
+
+int hijack_stdio(char * file) { 
+    int stdout_fd = dup(STDOUT_FILENO);
+    freopen(file, "w", stdout);
+    return stdout_fd;
+}
+
+void reset_hijack_stdio(int fd) {
+    fclose(stdout);
+    dup2(fd, STDOUT_FILENO);
+    stdout = fdopen(STDOUT_FILENO, "w");
+    close(fd);
+}
+
+int file_length(FILE * fp) {
+    fseek(fp, 0, SEEK_END); // seek to end of file
+    int size = ftell(fp); // get current file pointer
+    fseek(fp, 0, SEEK_SET); // seek back to beginning of file
+
+    return size;
 }
 
 #ifdef TEST

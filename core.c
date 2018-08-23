@@ -6,6 +6,8 @@
 //  Copyright © 2018 Ashley Coleman. All rights reserved.
 //
 
+#include <stdio.h>
+
 #include "core.h"
 
 // This function should calculate the letter
@@ -48,5 +50,61 @@ char * department_name(int department_code) {
 // Negative factorials are not defined, and thus should return -1
 int factorial(int n) {
     return 0;
+}
+
+
+// This function should print out a diamond to the screen.
+// The diamond has a different height based on the provided
+// height value. Examples of expected output are listed below
+//
+// if height == 1 then
+//
+// *
+// *
+//
+// if height == 2 then
+//
+// *
+// **
+// **
+// *
+//
+// if height == 5 then
+//
+// *
+// **
+// ***
+// ****
+// *****
+// *****
+// ****
+// ***
+// **
+// *
+//
+// This pattern should continue for any given height
+// 
+// The provided code currently prints out out a rectangle and needs to be updated
+// to print out the correct shape.
+//
+// Use 
+//     make main
+//     ./main
+// to test what the function is currently printing out
+//
+void print_diamond(int height) {
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < height; j++) {
+            printf("*");
+        }
+        printf("\n");
+    }
+
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < height; j++) {
+            printf("*");
+        }
+        printf("\n");
+    }
 }
 

@@ -11,5 +11,15 @@
 
 #ifndef TEST
 int main(int argc, const char * argv[]) {
+    print_diamond(1);
+    printf("\n");
+    printf("\n");
+    print_diamond(2);
+    printf("\n");
+    printf("\n");
+    print_diamond(5); 
+    printf("\n");
+    printf("\n");
+    print_diamond(10);
 }
 #endif

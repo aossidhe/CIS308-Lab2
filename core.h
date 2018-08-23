@@ -12,5 +12,6 @@
 char calculate_grade(int percent);
 char * department_name(int department_code);
 int factorial(int n);
+void print_diamond(int height);
 
 #endif /* core_h */
