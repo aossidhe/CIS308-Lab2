@@ -23,7 +23,12 @@
 // using only if/else/else if conditionals
 //
 char calculate_grade(int percent) {
-    return 0;
+	if(percent > 89) return 'A';
+	else if(percent > 79) return 'B';
+	else if(percent > 69) return 'C';
+	else if(percent > 59) return 'D';
+	else if(percent >= 0)  return 'F';
+	else return 0; 
 }
 
 
@@ -40,7 +45,26 @@ char calculate_grade(int percent) {
 //   20 | Chemistry
 //  100 | Math
 char * department_name(int department_code) {
-    return "";
+   switch(department_code){
+	case(01):
+	case(02):
+		return "Computer Science";
+		break;
+	case(05):
+		return "Computer Engineering";
+		break;
+	case(10):
+		return  "Physics";
+		break;
+	case(20):
+		return "Chemistry";
+		break;
+	case(100):
+		return "Math";
+		break;
+	default: return "Unknown";
+		break;
+   }
 }
 
 // This function should calculate the factorial of n
@@ -49,7 +73,12 @@ char * department_name(int department_code) {
 // There is one special case. 0 factorial is defined to be 1
 // Negative factorials are not defined, and thus should return -1
 int factorial(int n) {
-    return 0;
+    if(n < 0) return -1;
+    if(n == 0) return 1;
+    for(int i = n-1; i > 1; i--){
+	n = n * i;
+    }
+    return n;
 }
 
 
@@ -93,15 +122,15 @@ int factorial(int n) {
 // to test what the function is currently printing out
 //
 void print_diamond(int height) {
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < height; j++) {
+    for (int i = 1; i <= height; i++) {
+        for (int j = 0; j < i; j++) {
             printf("*");
         }
         printf("\n");
     }
 
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < height; j++) {
+    for (int i = height; i > 0; i--) {
+        for (int j = 0; j < i; j++) {
             printf("*");
         }
         printf("\n");
